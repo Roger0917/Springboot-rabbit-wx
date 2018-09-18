@@ -1,7 +1,6 @@
 package com.jay.rabbit.springboot.controller;
 
-import com.jay.rabbit.springboot.service.UploadService;
-import com.sun.org.apache.xpath.internal.operations.Mod;
+import com.jay.rabbit.springboot.service.impl.UploadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,7 +33,7 @@ public class ThumbnailController {
     }
 
     @PostMapping("/thumb")
-    public ModelAndView thumbnail(@RequestParam("img")CommonsMultipartFile file, HttpSession session){
+    public ModelAndView thumbnail(@RequestParam("img")CommonsMultipartFile file){
         String uploadPath = "/img";
         String realuploadPath = "I:\\molong_luojie\\springboot-producer";
         log.info("realuploadPath"+realuploadPath);

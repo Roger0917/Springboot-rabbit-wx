@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>图片上传添加文字和图片水印</title>
+</head>
+<body>
+    <form action="/upload/water_text" enctype="multipart/form-data" method="post">
+        <div>
+            <input type="file" name="img" />
+            <input type="submit" value="上传">
+        </div>
+    </form>
+    <form action="/upload/water_img" enctype="multipart/form-data" method="post">
+        <div>
+            <input type="file" name="img" />
+            <input type="submit" value="上传">
+        </div>
+    </form>
+</body>
+</html>
