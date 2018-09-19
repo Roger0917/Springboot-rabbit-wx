@@ -237,17 +237,139 @@ public class UploadService implements watermark {
         return uploadPath+"\\"+logoFileName;
     }
 
+    @Override
+    public String morewatermark(File file, String filename, String uploadPath, String realUploadPath) {
+        String logoFileName = "logo_"+ filename;
+        OutputStream out = null;
+        log.info("开始执行生成多个文字水印代码");
+        try{
+            //1.创建图片缓存对象
+            Image image = ImageIO.read(file);
+
+            int width = image.getWidth(null);
+            int height = image.getHeight(null);
+
+            BufferedImage bufferedImage = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
+
+            //2.创建绘图工具对象
+            Graphics2D g = bufferedImage.createGraphics();
+            //3.使用绘图工具对象将原图绘制到缓存图片对象
+            g.drawImage(image,0,0,width,height,null);
+
+            g.setFont(new Font(FONT_NAME,FONT_STYLE,FONT_SIZE));
+            g.setColor(FONT_COLOR);
+
+            //计算文字水印的宽高
+            int width1 = FONT_SIZE*getTextLength(MARK_TEXT);
+            int height1 = FONT_SIZE;
+
+            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP,ALPHA));
+            g.rotate(Math.toRadians(30),bufferedImage.getWidth()/2,bufferedImage.getHeight()/2);
+
+            //设置水印的坐标
+            int x = -width/2;
+            int y = -height/2;
+
+            while (x<width*1.5){
+                y = -height/2;
+                while (y<height*1.5){
+                    g.drawString(MARK_TEXT,x,y);
+                    y += height1+50;   //水印之间的间隔设为50
+                }
+                x+=width1+50;
+            }
+            g.dispose();
+            log.info("生成输出流对象");
+            out = new FileOutputStream(realUploadPath+"\\"+logoFileName);
+            JPEGImageEncoder en = JPEGCodec.createJPEGEncoder(out);
+            en.encode(bufferedImage);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(out!=null){
+                try {
+                    out.close();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        return uploadPath+"\\"+logoFileName;
+    }
+
+    @Override
+    public String moreimgmark(File file, String filename, String uploadPath, String realUploadPath) {
+        String logoFileName = "logo_"+ filename;
+        OutputStream out = null;
+        log.info("开始执行生成多个文字水印代码");
+        try{
+            //1.创建图片缓存对象
+            Image image = ImageIO.read(file);
+
+            int width = image.getWidth(null);
+            int height = image.getHeight(null);
+
+            BufferedImage bufferedImage = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
+
+            //2.创建绘图工具对象
+            Graphics2D g = bufferedImage.createGraphics();
+            //3.使用绘图工具对象将原图绘制到缓存图片对象
+            g.drawImage(image,0,0,width,height,null);
+
+            String logoPath = realUploadPath+"\\logo\\"+LOGO;
+            File logo = new File(logoPath);
+
+            Image logoImage = ImageIO.read(logo);
+            int width1 = logoImage.getWidth(null);
+            int height1 = logoImage.getHeight(null);
+
+            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP,ALPHA));
+            g.rotate(Math.toRadians(30),bufferedImage.getWidth()/2,bufferedImage.getHeight()/2);
+
+            //设置水印的坐标
+            int x = -width/2;
+            int y = -height/2;
+
+            while (x<width*1.5){
+                y = -height/2;
+                while (y<height*1.5){
+                    g.drawImage(logoImage,x,y,null);
+                    y += height1+50;   //水印之间的间隔设为50
+                }
+                x+=width1+50;
+            }
+            g.dispose();
+            log.info("生成输出流对象");
+            out = new FileOutputStream(realUploadPath+"\\"+logoFileName);
+            JPEGImageEncoder en = JPEGCodec.createJPEGEncoder(out);
+            en.encode(bufferedImage);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(out!=null){
+                try {
+                    out.close();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        return uploadPath+"\\"+logoFileName;
+    }
+
     public int getTextLength(String text){
         int length = text.length();
 
         for (int i=0;i<text.length();i++){
             String s = String.valueOf(text.charAt(i));
-            if (s.getBytes().length>1){
+            if (s.getBytes().length>1){ //中文字符
                 length++;
             }
         }
 
-        length = length%2==0?length/2:length/2+1;
+        length = length%2==0?length/2:length/2+1;   //中英文字符的转换
         return length;
     }
 }

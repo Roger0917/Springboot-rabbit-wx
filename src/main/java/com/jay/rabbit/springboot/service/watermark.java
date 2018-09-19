@@ -27,4 +27,6 @@ public interface watermark {
 
     public String watermark(File file,String filename, String uploadPath, String realUploadPath);
     public String imagemark(File file,String filename, String uploadPath, String realUploadPath);
+    public String morewatermark(File file,String filename, String uploadPath, String realUploadPath);
+    public String moreimgmark(File file,String filename, String uploadPath, String realUploadPath);
 }

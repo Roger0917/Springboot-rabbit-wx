@@ -32,7 +32,7 @@ public class WaterMarkController {
     @RequestMapping("/water")
     public ModelAndView water(){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("upload2");
+        modelAndView.setViewName("upload3");
         return modelAndView;
     }
 
@@ -67,6 +67,39 @@ public class WaterMarkController {
         return modelAndView;
     }
 
+    @RequestMapping("/water_moretext")
+    public ModelAndView waterMoreText(@RequestParam("img")CommonsMultipartFile file){
+        log.info("realuploadPath"+realuploadPath);
+
+        File file2 = getFile(file);
+       // String imgUrl = uploadService.uploadImage(file2,file.getOriginalFilename(),uploadPath,realuploadPath);
+        //String watertextUrl = uploadService.morewatermark(file2,file.getOriginalFilename(),uploadPath,realuploadPath);
+        String watermoreimgUrl = uploadService.moreimgmark(file2,file.getOriginalFilename(),uploadPath,realuploadPath);
+
+        ModelAndView modelAndView = new ModelAndView();
+        //modelAndView.addObject("imageURL",imgUrl);
+        //modelAndView.addObject("waterTextURL",watertextUrl);
+        modelAndView.setViewName("water_text");
+        return modelAndView;
+    }
+
+    @RequestMapping("/batch_water_moretext")
+    public ModelAndView batchWaterMoreText(@RequestParam("img")CommonsMultipartFile[] file){
+        log.info("realuploadPath"+realuploadPath);
+
+        for (int i=0;i<file.length;i++){
+            File file2 = getFile(file[i]);
+            // String imgUrl = uploadService.uploadImage(file2,file.getOriginalFilename(),uploadPath,realuploadPath);
+            //String watertextUrl = uploadService.morewatermark(file2,file.getOriginalFilename(),uploadPath,realuploadPath);
+            String watermoreimgUrl = uploadService.moreimgmark(file2,file[i].getOriginalFilename(),uploadPath,realuploadPath);
+        }
+
+        ModelAndView modelAndView = new ModelAndView();
+        //modelAndView.addObject("imageURL",imgUrl);
+        //modelAndView.addObject("waterTextURL",watertextUrl);
+        modelAndView.setViewName("water_text");
+        return modelAndView;
+    }
 
     public File getFile(@RequestParam("cmfFile") CommonsMultipartFile cmfFile) {
         CommonsMultipartFile commonsMultipartFile = (CommonsMultipartFile) cmfFile;
